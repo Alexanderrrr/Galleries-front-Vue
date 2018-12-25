@@ -10,22 +10,22 @@ export default {
   state: {
     user: getUserFromLocalStorage(),
     token: localStorage.getItem('token'),
-    errors: null,
+    auth_errors: null,
   },
   mutations: {
     SET_DATA(state, {user, token}){
       state.user = user,
       state.token = token,
-      state.errors = null
+      state.auth_errors = null
     },
     SET_ERRORS(state, payload){
-      state.errors = payload
+      state.auth_errors = payload
     }
   },
   actions: {
-    async login({commit}, {email, password}){
+    async login( { commit }, {email, password}){
       try {
-        const {user, token} = await  authService.login(email, password);
+        const {user, token} = await authService.login(email, password);
         localStorage.setItem('user', JSON.stringify(user));
         localStorage.setItem('token', token);
         authService.setAuthHeaders(token);
@@ -43,6 +43,19 @@ export default {
       localStorage.removeItem('user');
       commit('SET_DATA', {user: null, token: null})
       router.push({name: 'login'})
+    },
+
+    async register( { commit },{ email, first_name, last_name, password, password_confirmation} ){
+      try {
+        const {user, token} = await authService.register( email,first_name, last_name, password, password_confirmation);
+        localStorage.setItem('user', JSON.stringify(user));
+        localStorage.setItem('token', token);
+        authService.setAuthHeaders(token);
+        commit('SET_DATA', {user, token});
+        router.push({name: 'home'});
+      } catch (error){
+          commit('SET_ERRORS', error.response ? error.response.data.errors : error);
+      }
     }
 
   },
@@ -50,8 +63,8 @@ export default {
     getUser(state){
       return state.user
     },
-    getErrors(state){
-      return state.errors
+    getAuthErrors(state){
+      return state.auth_errors
     }
   }
 }

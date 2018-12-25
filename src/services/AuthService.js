@@ -8,6 +8,17 @@ export class AuthService {
       password
     }).then(({data}) => data);
   }
+
+  register( email, first_name, last_name, password, password_confirmation){
+    return HttpService.post('/auth/register', {
+      email,
+      first_name,
+      last_name,
+      password,
+      password_confirmation
+    }).then(({data}) => data);
+  }
+
   setAuthHeaders(token){
     if (!token) {
       delete HttpService.defaults.headers.common['Authorization'];
