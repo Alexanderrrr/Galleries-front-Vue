@@ -3,12 +3,13 @@
     <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
         <h5 class="my-0 mr-md-auto navbar-brand">Galleries</h5>
         <nav class="my-2 my-md-0 mr-md-3">
-          <router-link class="p-2 text-dark" :to="{name:'login'}">Login</router-link>
-          <router-link class="p-2 text-dark" :to="{name:'register'}">Register</router-link>
+          <router-link v-if="!user" class="p-2 text-dark" :to="{name:'login'}">Login</router-link>
+          <router-link v-if="!user" class="p-2 text-dark" :to="{name:'register'}">Register</router-link>
           <a v-if="user" href="#" @click="logout" class="p-2 text-dark">Logout</a>
         </nav>
     </div>
     <main role="main" class="container">
+      <p v-if="user" >Wellcome {{user.first_name}}</p>
       <router-view :key="$route.fullPath"/>
     </main>
   </div>
