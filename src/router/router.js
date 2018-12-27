@@ -3,13 +3,19 @@ import VueRouter from 'vue-router'
 import Login from '../components/auth/Login.vue'
 import Register from '../components/auth/Register.vue'
 import HomePage from '../components/HomePage.vue'
+import SingleGallery from '../components/gallery/SingleGallery.vue'
+import CreateNewGallery from '../components/gallery/CreateNewGallery.vue'
+import Author from '../components/auth/Author.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
-  {path:'/', component:HomePage,meta:{auth:true}, name:'home'},
+  {path:'/', component:HomePage, name:'home'},
+  {path:'/galleries/:id', component:SingleGallery, name:'single-gallery'},
+  {path:'/create', component:CreateNewGallery,meta:{auth:true}, name:'create-new-gallery'},
   {path:'/login', component: Login,meta:{guest:true},name:'login'},
   {path:'/register', component:Register,meta:{guest:true}, name:'register'},
+  {path:'/author/:id', component:Author,meta:{auth:true}, name:'author'},
 ]
 
 const router = new VueRouter({
