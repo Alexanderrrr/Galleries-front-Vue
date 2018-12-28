@@ -1,21 +1,28 @@
 <template>
   <form @submit.prevent="submitForm" class="form-signin">
-    <h1 class="h3 mb-3 font-weight-normal"><strong>Please Register</strong></br> It's Free and it will allways be free</h1>
+    <h1 class="h3 mb-3 font-weight-normal"><strong>Please Register</strong>It's Free and it will allways be free</h1>
+
     <label for="inputUserName" class="sr-only">First Name</label>
     <input v-model="first_name" type="text" id="inputFirstName" class="form-control" placeholder="First Name" required />
+
     <label for="inputUserName" class="sr-only">Last Name</label>
     <input v-model="last_name" type="text" id="inputLastName" class="form-control" placeholder="Last Name" required/>
+
     <label for="inputEmail" class="sr-only">Email address</label>
     <input v-model="email" type="email" id="inputEmail" class="form-control" placeholder="Email address" required/>
+
     <label for="inputPassword" class="sr-only">Password</label>
     <input v-model="password" type="password" id="inputPassword" class="form-control"
-         placeholder="Password with at least 1 digit and more than 7 letters"
+         placeholder="Password with at least 1 digit"
          required
          minlength="8"
+         title="You need at least one number"
     >
+
     <label for="inputPassword" class="sr-only">Confirm Password</label>
     <input v-model="password_confirmation" type="password" class="form-control" placeholder="Enter Password Again" required>
     <input type="checkbox" name="terms" required><label>Accepted terms and conditions</label>
+
     <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
     <template v-if="errors">
       <ul>
@@ -40,7 +47,8 @@ export default {
   },
   methods: {
     ...mapActions(['register']),
-    submitForm(){
+    submitForm()
+    {
       this.register({
         email: this.email,
         first_name: this.first_name,

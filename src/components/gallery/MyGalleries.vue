@@ -1,9 +1,13 @@
 <template>
-  <h1>Authors</h1>
+  <h1>My Galleries</h1>
+
 </template>
 
 <script>
+import galleryService from './../../services/GalleryService'
+
 export default {
+
 }
 </script>
 

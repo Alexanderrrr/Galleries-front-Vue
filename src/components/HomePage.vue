@@ -1,44 +1,58 @@
 <template>
-  <div class="container my-container">
-    <h1 id="loading" v-if="!galleries">There is no created galleries yet</h1>
-    <template v-else>
-      <div  v-for="(gallery, key) in galleries" :key="key" >
-          <gallery-row :gallery="gallery" />
+  <div class="container jumbotron">
+      <div class="my-container">
+        <h1 v-if="!galleries">There is no created galleries yet</h1>
+        <template v-else>
+          <div v-for="(gallery, key) in galleries" :key="key" class="my-galleries">
+             <gallery-row :gallery="gallery" />
+          </div>
+        </template>
       </div>
-    </template>
+      <button
+        v-show="lastPage > 1"
+        @click="loadMore"
+         class="btn btn-secondary"
+         type="button"
+        >
+         Load More
+       </button>
   </div>
 </template>
 
 <script>
 import galleryRow from '../components/gallery/GalleryRow'
-import {mapActions, mapGetters} from 'vuex'
+import galleryService from '../services/GalleryService'
 
 export default {
-  // beforeRouteEnter(to, from, next){
-  //     next(vm => {
-  //       vm.setGalleries()
-  //     })
-  // },
-  created(){
-    this.setGalleries()
+  beforeRouteEnter(to, from, next){
+      next(vm => {
+        galleryService.getAll()
+        .then( res => {
+          vm.galleries = res.data
+          vm.lastPage = res.last_page
+        })
+      })
   },
-
   name: "home",
-  components:{ galleryRow },
+  components:{
+    galleryRow,
+  },
   data(){
     return {
-    
+      galleries: null,
+      lastPage: 0,
+      page: 1
     }
   },
-
   methods: {
-    ...mapActions(['setGalleries'])
-  },
-
-  computed: {
-    ...mapGetters({
-      galleries: 'getGalleries'
-    })
+    loadMore(){
+      this.lastPage--
+      this.page++
+      galleryService.getAll(this.page)
+      .then( res => {
+        this.galleries.push(...res.data)
+      })
+    }
   }
 }
 </script>
@@ -46,9 +60,15 @@ export default {
 <style lang="css">
 .my-container {
   display: flex;
-  flex-flow: row wrap;
-  justify-content: center;
-  height: 100%;
+  flex-wrap: wrap;
 }
-
+.my-galleries{
+  margin-bottom: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid grey;
+}
+#searchField {
+  margin: auto;
+}
 </style>
