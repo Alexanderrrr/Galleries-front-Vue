@@ -29,9 +29,22 @@
           </a>
       </div>
       </b-carousel>
+      <div v-if="gallery.user.id == user.id">
+        <button
+           @click="deleteGalleryForm(gallery.id)"
+           class="btn btn-danger btn-block"
+        >Delete Gallery
+        </button>
+        <router-link
+          v-if="user"
+          class="btn btn-secondary btn-block"
+          :to="{name:'edit-gallery', params: {id: Number(gallery.id)}}">
+          Edit Gallery
+        </router-link>
+      </div>
       <template v-if="gallery.comments">
         <ul class="list-group" id="commentsGroup">
-          <li class="list-group-item active">Comments For This Gallery</li>
+          <h2>Comments For This Gallery</h2>
           <div v-for="(comment, key) in gallery.comments" :key="key">
             <li class="list-unstyled"><b>Comment by:</b> {{comment.user.first_name}} {{comment.user.last_name}}</li>
             <li class="list-unstyled"><b>Created at:</b> {{comment.created_at}}</li>
@@ -90,6 +103,14 @@ export default {
     this.sliding = false
   },
 
+  deleteGalleryForm(id) {
+    if (confirm("Are you sure?")) {
+      galleryService.deleteGallery(id);
+      this.$router.push({name:'my-galleries'})
+    }
+    return
+  },
+
   addCommentForm(){
     galleryService.addComment({
       content: this.content ,
@@ -99,8 +120,12 @@ export default {
   },
 
   deleteCommentForm(id, key){
-    this.gallery.comments.splice(key,1)
-    galleryService.deleteComment(id)
+    let answer = confirm("Are you sure?")
+    if (answer) {
+      this.gallery.comments.splice(key,1)
+      galleryService.deleteComment(id)
+    }
+    return
   }
 },
   computed: {

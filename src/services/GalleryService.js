@@ -47,12 +47,23 @@ export class GalleryService {
     .then(({data}) => data)
   }
 
-  addComment( {content, id} ){
-    console.log(content, id);
+  edit({name, description, images}, id){
+    return HttpService.put(`galleries/${id}`, {
+      name,
+      description,
+      images
+    })
+  }
+
+  deleteGallery(id){
+    return HttpService.delete(`gallery/${id}`)
+  }
+
+  addComment( {content}, id ){
     return HttpService.post(`my-galleries/${id}`, {
-      params:{
+
         content
-      }
+
     })
   }
 

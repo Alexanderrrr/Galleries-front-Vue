@@ -5,6 +5,7 @@ import Register from '../components/auth/Register.vue'
 import HomePage from '../components/HomePage.vue'
 import SingleGallery from '../components/gallery/SingleGallery.vue'
 import CreateNewGallery from '../components/gallery/CreateNewGallery.vue'
+import EditGallery from '../components/gallery/EditGallery.vue'
 import MyGalleries from '../components/gallery/MyGalleries.vue'
 import AuthorsGallery from '../components/gallery/AuthorsGallery.vue'
 import BootstrapVue from 'bootstrap-vue'
@@ -38,6 +39,12 @@ const routes = [
     component:CreateNewGallery,
     meta:{auth:true},
     name:'create-new-gallery'
+  },
+  {
+    path: '/edit/:id',
+    component: EditGallery,
+    name:'edit-gallery'
+
   },
   {
     path:'/login',
