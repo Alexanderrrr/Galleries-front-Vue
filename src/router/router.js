@@ -52,10 +52,10 @@ const routes = [
     name:'register'
   },
   {
-    path:'/authors/:id',
+    path:'/authors-galleries/:id',
     component:AuthorsGallery,
     meta:{auth:true},
-    name:'authors-gallery'
+    name:'authors-galleries'
   },
 ]
 

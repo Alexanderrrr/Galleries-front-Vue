@@ -1,6 +1,9 @@
 <template>
   <div class="container jumbotron">
-    <searchField @search="search"/>
+      <h5 class="my-0 mr-md-auto navbar-brand">All Galleries Page</h5>
+    <div class="searchMyGalleries">
+      <searchField @search="search"/>
+    </div>
       <div class="my-container">
         <h1 v-if="!galleries">There is no created galleries yet</h1>
         <template v-else>

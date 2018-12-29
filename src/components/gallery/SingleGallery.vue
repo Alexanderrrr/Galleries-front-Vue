@@ -29,13 +29,42 @@
           </a>
       </div>
       </b-carousel>
-    </div>
+      <template v-if="gallery.comments">
+        <ul class="list-group" id="commentsGroup">
+          <li class="list-group-item active">Comments For This Gallery</li>
+          <div v-for="(comment, key) in gallery.comments" :key="key">
+            <li class="list-unstyled"><b>Comment by:</b> {{comment.user.first_name}} {{comment.user.last_name}}</li>
+            <li class="list-unstyled"><b>Created at:</b> {{comment.created_at}}</li>
+            <ul>
+              <li
+                id="commentText"
+                class="list-group-item"
+              >
+                <b>Comment:</b>
+                {{comment.content}}</br>
+                <button @click="deleteCommentForm(comment.id, key)" class="btn btn-outline-danger btn-sm">Delete Comment</button>
+              </li>
+            </ul>
+          </div>
+        </ul>
+      </template>
+      <template v-else>
+        <h1>No Comments For This Gallery</h1>
+      </template>
+      <div v-if="user">
+        <form @submit.prevent="addCommentForm">
+          <p>Add Comment</p>
+          <textarea v-model="content" name="content" rows="8" cols="65"></textarea>
+          <button class="btn btn-lg btn-primary btn-block" type="submit">Add Comment</button>
+        </form>
+      </div>
+     </div><!-- end of id myCarousel -->
   </div>
-
 </template>
 
 <script>
 import galleryService from './../../services/GalleryService'
+import {mapGetters} from 'vuex'
 
 export default {
 
@@ -49,7 +78,8 @@ export default {
     return {
       gallery: {},
       slide: 0,
-      sliding: null
+      sliding: null,
+      content: ''
     }
   },
   methods: {
@@ -58,8 +88,26 @@ export default {
   },
   onSlideEnd (slide) {
     this.sliding = false
+  },
+
+  addCommentForm(){
+    galleryService.addComment({
+      content: this.content ,
+      id: this.$route.params.id
+    })
+    this.content = null
+  },
+
+  deleteCommentForm(id, key){
+    this.gallery.comments.splice(key,1)
+    galleryService.deleteComment(id)
   }
-}
+},
+  computed: {
+    ...mapGetters({
+      user: 'getUser'
+    })
+  }
 }
 </script>
 
@@ -67,9 +115,17 @@ export default {
 #myCarousel{
   width: 30rem;
   margin: auto;
+  margin-bottom: 20px
 }
 .myCarouselClass{
   width: 30rem;
   margin: auto;
+}
+#commentsGroup{
+  margin-top: 20px
+}
+#commentText{
+  margin-bottom: 40px;
+  border-top: 1px solid grey
 }
 </style>

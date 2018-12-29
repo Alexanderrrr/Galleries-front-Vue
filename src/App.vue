@@ -1,10 +1,10 @@
 <template>
   <div id="app">
     <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
-        <h5 class="my-0 mr-md-auto navbar-brand">Galleries</h5>
+        <h5 class="my-0 mr-md-auto navbar-brand"><a href="/" id="brandLink">Galleries</a></h5>
         <nav class="my-2 my-md-0 mr-md-3" id="nav-background">
-          <router-link v-if="user" class="p-2 text-dark" :to="{name:'my-galleries'}">My Galleries</router-link>
           <router-link class="p-2 text-dark" :to="{name:'home'}">All Galleries</router-link>
+          <router-link v-if="user" class="p-2 text-dark" :to="{name:'my-galleries'}">My Galleries</router-link>
           <router-link
             v-if="user"
             class="p-2 text-dark"
@@ -17,7 +17,6 @@
         </nav>
     </div>
     <main role="main">
-      <p v-if="user" >Wellcome {{user.first_name}}</p>
       <router-view :key="$route.fullPath"/>
     </main>
   </div>
@@ -48,11 +47,18 @@ export default {
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Comic Sans MS", cursive, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+#brandLink:hover {
+  color: black;
+  text-decoration: none;
+}
+#brandLink{
+  color: black
 }
 </style>

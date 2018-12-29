@@ -26,8 +26,14 @@ export class GalleryService {
     })
   }
 
-  authorsGalleries(id){
-    return HttpService.get(`authors/${id}`)
+  authorsGalleries(id,term='', page=1){
+    return HttpService.get(`authors-galleries/${id}`, {
+      params: {
+        id,
+        term,
+        page
+      }
+    })
     .then( ({data}) => data);
   }
 
@@ -39,6 +45,19 @@ export class GalleryService {
       }
     })
     .then(({data}) => data)
+  }
+
+  addComment( {content, id} ){
+    console.log(content, id);
+    return HttpService.post(`my-galleries/${id}`, {
+      params:{
+        content
+      }
+    })
+  }
+
+  deleteComment (id) {
+    return HttpService.delete(`comment/${id}`)
   }
 
 }

@@ -38,7 +38,7 @@
 
     <template v-if="errors">
       <ul>
-        <li v-for="err in errors" :key="err.id" class="p-3 mb-2 alert alert-danger rounded">{{ err }}</li>
+        <li v-for="err in errors" :key="err.id" class="alert alert-danger rounded">{{ err }}</li>
       </ul>
     </template>
   </form>
@@ -67,7 +67,7 @@ export default {
       })
       .then( () => this.$router.push({name:'my-galleries'}))
       .catch ( errors => {
-        this.errors = errors.response.errors.name
+        this.errors = errors.response.data.errors.name
       })
 
     },
