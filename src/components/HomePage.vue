@@ -1,5 +1,6 @@
 <template>
   <div class="container jumbotron">
+    <searchField @search="search"/>
       <div class="my-container">
         <h1 v-if="!galleries">There is no created galleries yet</h1>
         <template v-else>
@@ -8,8 +9,9 @@
           </div>
         </template>
       </div>
+
       <button
-        v-show="lastPage > 1"
+        v-show="page != lastPage"
         @click="loadMore"
          class="btn btn-secondary"
          type="button"
@@ -22,6 +24,7 @@
 <script>
 import galleryRow from '../components/gallery/GalleryRow'
 import galleryService from '../services/GalleryService'
+import searchField from './partials/SearchField'
 
 export default {
   beforeRouteEnter(to, from, next){
@@ -36,21 +39,33 @@ export default {
   name: "home",
   components:{
     galleryRow,
+    searchField
   },
   data(){
     return {
       galleries: null,
-      lastPage: 0,
-      page: 1
+      lastPage: null,
+      page: 1,
+      term: null
     }
   },
   methods: {
     loadMore(){
-      this.lastPage--
       this.page++
-      galleryService.getAll(this.page)
+      galleryService.getAll(this.term, this.page)
       .then( res => {
         this.galleries.push(...res.data)
+      })
+    },
+    search(term){
+      this.page = 1
+      this.term = term
+      this.galleries = {}
+      galleryService.getAll(this.term, this.page)
+      .then( (res)  => {
+        this.galleries = res.data
+        this.lastPage = res.last_page
+
       })
     }
   }

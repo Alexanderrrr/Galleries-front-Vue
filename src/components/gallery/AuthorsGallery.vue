@@ -1,17 +1,24 @@
 <template lang="html">
-  <div>
-    {{authorsGalleries.galleries}}
-    <div v-for="gallery in authorsGalleries.galleries" :key="gallery.id">
-      <div class="card" style="width: 18rem;">
-        <img class="card-img-top" :src="gallery.images" alt="Card image cap">
-        <div class="card-body">
-          <router-link :to="{ name: 'single-gallery', params: {id: Number(gallery.id)} }">
-            <h5 class="card-title">{{ gallery.name }}</h5>
-          </router-link>
-          <p class="card-text">{{gallery.created_at}}</p>
+  <div class="my-container">
+    <template v-if="authorsGalleries">
+      <div v-for="gallery in authorsGalleries" :key="gallery.id" class="my-galleries">
+        <div class="card" style="width: 18rem;">
+          <img class="card-img-top" :src="gallery.images[0].url" alt="Card image cap">
+          <div class="card-body">
+            <router-link :to="{ name: 'single-gallery', params: {id: Number(gallery.id)} }">
+              <h5 class="card-title">{{ gallery.name }}</h5>
+            </router-link>
+            <router-link :to="{ name: 'authors-gallery', params: {id: Number(gallery.user.id)} }">
+              <p v-if="gallery.user" class="card-text">{{gallery.user.first_name}} {{gallery.user.last_name}}</p>
+            </router-link>
+            <p class="card-text">{{gallery.created_at}}</p>
+          </div>
         </div>
       </div>
-    </div>
+    </template>
+    <template v-else>
+      <h1>Loading...</h1>
+    </template>
   </div>
 </template>
 

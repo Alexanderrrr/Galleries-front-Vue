@@ -20,7 +20,8 @@
             id="inputImageUrl"
             class="form-control"
             placeholder="url must end with jpg,png or jpeg"
-            pattern="(?=.*\d).{8,}"
+            pattern="https?://.+(png|jpg|jpeg)"
+            title="Url must end with jpg,png or jpeg"
         />
         <a v-show="num > 1" @click.prevent="removeInput(key)" class="badge badge-danger" href="#">Remove</a>
         <div>
@@ -29,7 +30,7 @@
         </div>
       </span>
     </div>
-    <button @click="createInput" id="addField" type="button" class="btn" >Add Another URL</button>
+    <button @click="createInput" id="addField" type="button" class="outline-secondary" >Add Another URL</button>
     <span>
       <button class="btn btn-lg btn-primary btn-block" type="submit">Create</button>
       <button @click="cancel" class="btn btn-lg btn-secondary btn-block" type="button">Cancel</button>
@@ -37,7 +38,7 @@
 
     <template v-if="errors">
       <ul>
-        <li v-for="err in errors" :key="err.id" class="p-3 mb-2 alert alert-danger rounded">{{ err[0] }}</li>
+        <li v-for="err in errors" :key="err.id" class="p-3 mb-2 alert alert-danger rounded">{{ err }}</li>
       </ul>
     </template>
   </form>
@@ -64,9 +65,9 @@ export default {
         description: this.description,
         images: this.images,
       })
-      .then( () => this.$router.push({name:'home'}))
+      .then( () => this.$router.push({name:'my-galleries'}))
       .catch ( errors => {
-        this.errors = errors.response.data.message
+        this.errors = errors.response.errors.name
       })
 
     },

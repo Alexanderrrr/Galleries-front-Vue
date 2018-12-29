@@ -2,7 +2,7 @@
   <div class="container">
     <ul class="list-group myCarouselClass">
       <li class="list-group-item"><b>Name of the Gallery:</b> {{gallery.name}}</li>
-      <li class="list-group-item"><b>Created By:</b> {{gallery.user.first_name}} {{gallery.user.last_name}}</li>
+      <li v-if="gallery.user" class="list-group-item"><b>Created By:</b> {{gallery.user.first_name}} {{gallery.user.last_name}}</li>
       <li class="list-group-item"><b>Created at:</b> {{gallery.created_at}}</li>
       <li class="list-group-item"><b>Gallery Description:</b> {{ gallery.description }}</li>
     </ul>

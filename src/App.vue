@@ -3,7 +3,7 @@
     <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
         <h5 class="my-0 mr-md-auto navbar-brand">Galleries</h5>
         <nav class="my-2 my-md-0 mr-md-3" id="nav-background">
-          <router-link v-if="user" class="p-2 text-dark" :to="{name:'my-galleries', params: {id: Number(user.id)}}">My Galleries</router-link>
+          <router-link v-if="user" class="p-2 text-dark" :to="{name:'my-galleries'}">My Galleries</router-link>
           <router-link class="p-2 text-dark" :to="{name:'home'}">All Galleries</router-link>
           <router-link
             v-if="user"

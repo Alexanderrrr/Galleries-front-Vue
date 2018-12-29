@@ -1,6 +1,6 @@
 <template>
   <div>
-    <form @submit.prevent="filterMovies" class="form-inline my-2 my-lg-0">
+    <form @submit.prevent="filterGalleries" class="form-inline my-2 my-lg-0">
       <input v-model="term" class="form-control mr-sm-2" type="search" placeholder="filter galleries" aria-label="Search">
       <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Filter</button>
     </form>
@@ -20,10 +20,8 @@ export default {
   },
 
   methods: {
-    ...mapMutations({search: 'CHANGE_SEARCH_TERM'}),
-
-    filterMovies() {
-      galleryService.getAll(this.term)
+    filterGalleries() {
+      this.$emit('search', this.term)
     }
 
   }

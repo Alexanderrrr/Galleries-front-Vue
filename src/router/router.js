@@ -28,7 +28,7 @@ const routes = [
     name:'single-gallery'
   },
   {
-    path:'/my-galleries/:id',
+    path:'/my-galleries',
     component:MyGalleries,
     meta:{auth:true},
     name:'my-galleries'

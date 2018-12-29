@@ -2,10 +2,10 @@ import HttpService from './HttpService.js'
 
 export class GalleryService {
 
-  getAll(page){
+  getAll(term='', page=1){
     return HttpService.get('galleries', {
       params: {
-
+        term,
         page
       }
     })
@@ -29,6 +29,16 @@ export class GalleryService {
   authorsGalleries(id){
     return HttpService.get(`authors/${id}`)
     .then( ({data}) => data);
+  }
+
+  myGalleries(term='', page=1){
+    return HttpService.get('my-galleries', {
+      params: {
+        term,
+        page
+      }
+    })
+    .then(({data}) => data)
   }
 
 }
