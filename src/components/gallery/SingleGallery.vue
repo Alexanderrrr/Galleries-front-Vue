@@ -2,7 +2,15 @@
   <div class="container">
     <ul class="list-group myCarouselClass">
       <li class="list-group-item"><b>Name of the Gallery:</b> {{gallery.name}}</li>
-      <li v-if="gallery.user" class="list-group-item"><b>Created By:</b> {{gallery.user.first_name}} {{gallery.user.last_name}}</li>
+      <li
+        v-if="gallery.user"
+        class="list-group-item"
+      >
+        <b>Created By: </b>
+        <router-link :to="{ name: 'authors-galleries', params: {id: Number(gallery.user.id)} }">
+          {{gallery.user.first_name}} {{gallery.user.last_name}}
+        </router-link>
+      </li>
       <li class="list-group-item"><b>Created at:</b> {{gallery.created_at}}</li>
       <li class="list-group-item"><b>Gallery Description:</b> {{ gallery.description }}</li>
     </ul>
@@ -36,16 +44,15 @@
         >Delete Gallery
         </button>
         <router-link
-          v-if="user"
           class="btn btn-secondary btn-block"
           :to="{name:'edit-gallery', params: {id: Number(gallery.id)}}">
           Edit Gallery
         </router-link>
       </div>
-      <template v-if="gallery.comments">
+      <template v-if="comments">
         <ul class="list-group" id="commentsGroup">
           <h2>Comments For This Gallery</h2>
-          <div v-for="(comment, key) in gallery.comments" :key="key">
+          <div v-for="(comment, key) in comments" :key="key">
             <li class="list-unstyled"><b>Comment by:</b> {{comment.user.first_name}} {{comment.user.last_name}}</li>
             <li class="list-unstyled"><b>Created at:</b> {{comment.created_at}}</li>
             <ul>
@@ -55,7 +62,7 @@
               >
                 <b>Comment:</b>
                 {{comment.content}}</br>
-                <button @click="deleteCommentForm(comment.id, key)" class="btn btn-outline-danger btn-sm">Delete Comment</button>
+                <button v-if="comment.user.id == user.id" @click="deleteCommentForm(comment.id, key)" class="btn btn-outline-danger btn-sm">Delete Comment</button>
               </li>
             </ul>
           </div>
@@ -84,7 +91,10 @@ export default {
   beforeRouteEnter(to, from, next){
     next(vm => {
       galleryService.show(Number(vm.$route.params.id))
-      .then(data => vm.gallery = data)
+      .then(data => {
+        vm.gallery = data,
+        vm.comments = data.comments
+      })
     })
   },
   data(){
@@ -92,43 +102,48 @@ export default {
       gallery: {},
       slide: 0,
       sliding: null,
-      content: ''
+      content: '',
+      comments: []
     }
   },
   methods: {
-  onSlideStart (slide) {
-    this.sliding = true
-  },
-  onSlideEnd (slide) {
-    this.sliding = false
-  },
+    onSlideStart (slide) {
+      this.sliding = true
+    },
+    onSlideEnd (slide) {
+      this.sliding = false
+    },
 
-  deleteGalleryForm(id) {
-    if (confirm("Are you sure?")) {
-      galleryService.deleteGallery(id);
-      this.$router.push({name:'my-galleries'})
+    deleteGalleryForm(id) {
+      if (confirm("Are you sure?")) {
+        galleryService.deleteGallery(id);
+        this.$router.push({name:'my-galleries'})
+      }
+      return
+    },
+
+    addCommentForm(){
+      galleryService.addComment({
+        content: this.content ,
+        id: this.$route.params.id
+      })
+      .then(data => {
+        this.comments.push(data),
+        this.content = ""
+      })
+    },
+
+    deleteCommentForm(id, key){
+      let answer = confirm("Are you sure?")
+      if (answer) {
+        this.gallery.comments.splice(key,1)
+        galleryService.deleteComment(id)
+      }
+      return
     }
-    return
-  },
-
-  addCommentForm(){
-    galleryService.addComment({
-      content: this.content ,
-      id: this.$route.params.id
-    })
-    this.content = null
-  },
-
-  deleteCommentForm(id, key){
-    let answer = confirm("Are you sure?")
-    if (answer) {
-      this.gallery.comments.splice(key,1)
-      galleryService.deleteComment(id)
-    }
-    return
-  }
 },
-  computed: {
+
+computed: {
     ...mapGetters({
       user: 'getUser'
     })

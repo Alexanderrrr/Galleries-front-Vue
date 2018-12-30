@@ -16,13 +16,19 @@
          placeholder="Password with at least 1 digit"
          required
          minlength="8"
+         pattern="(?=.*\d).{8,}"
          title="You need at least one number"
     >
 
     <label for="inputPassword" class="sr-only">Confirm Password</label>
-    <input v-model="password_confirmation" type="password" class="form-control" placeholder="Enter Password Again" required>
+    <input
+      v-model="password_confirmation"
+      type="password"
+      class="form-control"
+      placeholder="Enter Password Again"
+      required
+    >
     <input type="checkbox" name="terms" required><label>Accepted terms and conditions</label>
-
     <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
     <template v-if="errors">
       <ul>
@@ -60,7 +66,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      errors: 'getAuthErrors'
+      errors: 'getRegisterErrors'
     })
   }
 }

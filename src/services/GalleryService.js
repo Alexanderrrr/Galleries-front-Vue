@@ -59,12 +59,11 @@ export class GalleryService {
     return HttpService.delete(`gallery/${id}`)
   }
 
-  addComment( {content}, id ){
+  addComment({content,id}){
     return HttpService.post(`my-galleries/${id}`, {
-
         content
-
     })
+    .then(({data}) => data)
   }
 
   deleteComment (id) {

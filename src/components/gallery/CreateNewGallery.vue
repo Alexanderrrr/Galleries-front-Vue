@@ -3,25 +3,38 @@
     <h1 class="h3 mb-3 font-weight-normal">Create New Gallery</h1>
 
     <label for="inputGalleryName" class="sr-only">Name of the Gallery</label>
-    <input v-model="name" type="text" id="inputGalleryName" class="form-control" placeholder="Gallery Name" required>
+    <input
+      v-model="name"
+      type="text"
+      id="inputGalleryName"
+      class="form-control"
+      placeholder="Gallery Name"
+      required
+      minlength="2"
+      maxlength="255"
+    >
 
     <label for="inputDescription">Description</label>
-    <textarea id="inputDescription" class="form-control" rows="8" cols="80"
-        v-model="description"
-        placeholder="Describe your gallery here...">
+    <textarea
+      id="inputDescription"
+      class="form-control"
+      rows="8" cols="80"
+      v-model="description"
+      placeholder="Describe your gallery here...">
     </textarea>
 
     <div class="imgUrlContainer">
       <label>You need to input at least 1 image url</label>
       <span id="imgSpan" v-for="(num, key) in counter" :key="key">
         <input
-            v-model="images[key].url"
-            type="url"
-            id="inputImageUrl"
-            class="form-control"
-            placeholder="url must end with jpg,png or jpeg"
-            pattern="https?://.+(png|jpg|jpeg)"
-            title="Url must end with jpg,png or jpeg"
+          v-model="images[key].url"
+          type="url"
+          id="inputImageUrl"
+          class="form-control"
+          required
+          placeholder="url must end with jpg,png or jpeg"
+          pattern="https?://.+(png|jpg|jpeg)"
+          title="Url must end with jpg,png or jpeg"
         />
         <a v-show="num > 1" @click.prevent="removeInput(key)" class="badge badge-danger" href="#">Remove</a>
         <div>
@@ -72,7 +85,7 @@ export default {
 
     },
     cancel(){
-      this.$router.push({name:'home'})
+      this.$router.push({name:'my-galleries'})
     },
     createInput(){
       this.counter ++

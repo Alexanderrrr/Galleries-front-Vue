@@ -17,6 +17,7 @@
         </nav>
     </div>
     <main role="main">
+      <h5 v-if="user" class="my-0 mr-md-auto navbar-brand">{{user.first_name}} {{user.last_name}}</h5>
       <router-view :key="$route.fullPath"/>
     </main>
   </div>

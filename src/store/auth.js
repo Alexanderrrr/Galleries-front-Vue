@@ -11,6 +11,7 @@ export default {
     user: getUserFromLocalStorage(),
     token: localStorage.getItem('token'),
     auth_errors: null,
+    register_errors: null
   },
   mutations: {
     SET_DATA(state, {user, token}){
@@ -20,6 +21,9 @@ export default {
     },
     SET_ERRORS(state, payload){
       state.auth_errors = payload
+    },
+    SET_REGISTER_ERRORS(state, payload){
+      state.register_errors = payload
     }
   },
   actions: {
@@ -54,7 +58,7 @@ export default {
         commit('SET_DATA', {user, token});
         router.push({name: 'home'});
       } catch (error){
-          commit('SET_ERRORS', error.response ? error.response.data.errors : error);
+          commit('SET_REGISTER_ERRORS', error.response ? error.response.data.errors : error);
       }
     }
 
@@ -65,6 +69,9 @@ export default {
     },
     getAuthErrors(state){
       return state.auth_errors
+    },
+    getRegisterErrors(state){
+      return state.register_errors
     }
   }
 }

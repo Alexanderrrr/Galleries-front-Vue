@@ -1,18 +1,15 @@
 <template>
   <div class="container jumbotron">
+    <template v-if="galleries">
       <h5 class="my-0 mr-md-auto navbar-brand">All Galleries Page</h5>
-    <div class="searchMyGalleries">
-      <searchField @search="search"/>
-    </div>
+      <div class="searchMyGalleries">
+        <searchField @search="search"/>
+      </div>
       <div class="my-container">
-        <h1 v-if="!galleries">There is no created galleries yet</h1>
-        <template v-else>
           <div v-for="(gallery, key) in galleries" :key="key" class="my-galleries">
              <gallery-row :gallery="gallery" />
           </div>
-        </template>
       </div>
-
       <button
         v-show="page != lastPage"
         @click="loadMore"
@@ -21,6 +18,10 @@
         >
          Load More
        </button>
+     </template>
+     <template v-else>
+         <h1>Empty...</h1>
+     </template>
   </div>
 </template>
 
