@@ -102,7 +102,7 @@ export default {
       sliding: null,
       content: '',
       galleryComments: [],
-      galleryUser: null
+      galleryUser: {}
     }
   },
   methods: {
@@ -115,8 +115,8 @@ export default {
 
     deleteGalleryForm(id) {
       if (confirm("Are you sure?")) {
-        galleryService.deleteGallery(id);
-        this.$router.push({name:'my-galleries'})
+        galleryService.deleteGallery(id)
+        .then(() => {this.$router.push({name:'my-galleries'})})
       }
       return
     },
@@ -127,7 +127,7 @@ export default {
         id: this.$route.params.id
       })
       .then(data => {
-        this.comments.push(data),
+        this.galleryComments.push(data),
         this.content = ""
       })
     },

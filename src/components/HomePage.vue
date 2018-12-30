@@ -1,5 +1,6 @@
 <template>
   <div class="container jumbotron">
+    <h2 v-if="!galleries">There is No Created Galleries</h2>
     <template v-if="galleries">
       <h5 class="my-0 mr-md-auto navbar-brand">All Galleries Page</h5>
       <div class="searchMyGalleries">
@@ -18,9 +19,6 @@
         >
          Load More
        </button>
-     </template>
-     <template v-else>
-         <h1>Empty...</h1>
      </template>
   </div>
 </template>

@@ -13,7 +13,7 @@
 
     <div class="imgUrlContainer">
       <label>You need to input at least 1 image url</label>
-      <span id="imgSpan" v-for="(num, key) in counter" :key="key">
+      <span id="imgSpan" v-for="(num, key) in images" :key="key">
         <input
             v-model="images[key].url"
             type="url"
@@ -21,9 +21,9 @@
             class="form-control"
             placeholder="url must end with jpg,png or jpeg"
             pattern="https?://.+(png|jpg|jpeg)"
-            title="Url must end with jpg,png or jpeg"
+            title="Url must be https:// and end with jpg,png or jpeg"
         />
-        <a v-show="num > 1" @click.prevent="removeInput(key)" class="badge badge-danger" href="#">Remove</a>
+        <a v-show="counter > 1" @click.prevent="removeInput(key)" class="badge badge-danger" href="#">Remove</a>
         <div>
           <a @click.prevent="moveInputUp(key)" class="badge badge-primary" href="#">Move Up</a>
           <a @click.prevent="moveInputDown(key)" class="badge badge-secondary" href="#">Move Down</a>
@@ -32,7 +32,7 @@
     </div>
     <button @click="createInput" id="addField" type="button" class="outline-secondary" >Add Another URL</button>
     <span>
-      <button class="btn btn-lg btn-primary btn-block" type="submit">Create</button>
+      <button class="btn btn-lg btn-primary btn-block" type="submit">Edit</button>
       <button @click="cancel" class="btn btn-lg btn-secondary btn-block" type="button">Cancel</button>
     </span>
 
@@ -47,6 +47,18 @@
 <script>
 import galleryService from './../../services/GalleryService'
 export default {
+  beforeRouteEnter(to, from, next){
+    next(vm => {
+      galleryService.show(Number(vm.$route.params.id))
+      .then(data => {
+        vm.name = data.name
+        vm.description = data.description,
+        vm.images = [],
+        vm.images = data.images
+        vm.counter = vm.images.length
+      })
+    })
+  },
   data(){
     return {
       name: "",
@@ -54,34 +66,35 @@ export default {
       images: [
         {url: ""},
       ],
-      counter: 1,
+      counter: 0,
       errors: null
     }
   },
   methods: {
     submitForm(){
+      this.images = this.images.filter(item => item.url !== undefined)
       galleryService.edit({
         name: this.name,
         description: this.description,
         images: this.images,
       }, this.$route.params.id)
-      .then( () => this.$router.push({name:'my-galleries'}))
+      .then( () => this.$router.push({name:'single-gallery', params: {id: Number(this.$route.params.id)}}))
       .catch ( errors => {
-        this.errors = errors.response.data.errors.name
+        this.errors = errors.response.data.errors
       })
 
     },
     cancel(){
-      this.$router.push({name:'home'})
+      this.$router.push({name:'single-gallery', params: {id: Number(this.$route.params.id)}})
     },
     createInput(){
       this.counter ++
-      this.images.push({url: ""})
+      this.images.push({})
 
     },
     removeInput(key){
-      this.counter--
-      this.images.splice(key,1);
+      this.images.splice(key,1)
+      this.counter--;
     },
     moveInputUp(key){
       if(key) {
