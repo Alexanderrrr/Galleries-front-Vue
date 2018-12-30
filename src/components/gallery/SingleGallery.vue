@@ -2,13 +2,10 @@
   <div class="container">
     <ul class="list-group myCarouselClass">
       <li class="list-group-item"><b>Name of the Gallery:</b> {{gallery.name}}</li>
-      <li
-        v-if="gallery.user"
-        class="list-group-item"
-      >
+      <li class="list-group-item">
         <b>Created By: </b>
-        <router-link :to="{ name: 'authors-galleries', params: {id: Number(gallery.user.id)} }">
-          {{gallery.user.first_name}} {{gallery.user.last_name}}
+        <router-link :to="{ name: 'authors-galleries', params: {id: Number(galleryUser.id)} }">
+          {{galleryUser.first_name}} {{galleryUser.last_name}}
         </router-link>
       </li>
       <li class="list-group-item"><b>Created at:</b> {{gallery.created_at}}</li>
@@ -37,7 +34,7 @@
           </a>
       </div>
       </b-carousel>
-      <div v-if="gallery.user.id == user.id">
+      <div v-if="user && galleryUser.id == user.id">
         <button
            @click="deleteGalleryForm(gallery.id)"
            class="btn btn-danger btn-block"
@@ -49,10 +46,10 @@
           Edit Gallery
         </router-link>
       </div>
-      <template v-if="comments">
+      <div>
         <ul class="list-group" id="commentsGroup">
           <h2>Comments For This Gallery</h2>
-          <div v-for="(comment, key) in comments" :key="key">
+          <div v-for="(comment, key) in galleryComments" :key="key">
             <li class="list-unstyled"><b>Comment by:</b> {{comment.user.first_name}} {{comment.user.last_name}}</li>
             <li class="list-unstyled"><b>Created at:</b> {{comment.created_at}}</li>
             <ul>
@@ -62,15 +59,15 @@
               >
                 <b>Comment:</b>
                 {{comment.content}}</br>
-                <button v-if="comment.user.id == user.id" @click="deleteCommentForm(comment.id, key)" class="btn btn-outline-danger btn-sm">Delete Comment</button>
+                <button v-if="user && comment.user.id == user.id" @click="deleteCommentForm(comment.id, key)" class="btn btn-outline-danger btn-sm">Delete Comment</button>
               </li>
             </ul>
           </div>
         </ul>
-      </template>
-      <template v-else>
+      </div>
+      <div v-if="!galleryComments">
         <h1>No Comments For This Gallery</h1>
-      </template>
+      </div>
       <div v-if="user">
         <form @submit.prevent="addCommentForm">
           <p>Add Comment</p>
@@ -93,7 +90,8 @@ export default {
       galleryService.show(Number(vm.$route.params.id))
       .then(data => {
         vm.gallery = data,
-        vm.comments = data.comments
+        vm.galleryComments = data.comments,
+        vm.galleryUser = data.user
       })
     })
   },
@@ -103,7 +101,8 @@ export default {
       slide: 0,
       sliding: null,
       content: '',
-      comments: []
+      galleryComments: [],
+      galleryUser: null
     }
   },
   methods: {

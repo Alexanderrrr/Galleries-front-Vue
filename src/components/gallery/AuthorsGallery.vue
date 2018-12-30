@@ -59,7 +59,7 @@ export default {
       this.page = 1
       this.term = term
       this.authorsGalleries = {}
-      galleryService.authorsGalleries(this.term, this.page, this.$route.params.id)
+      galleryService.authorsGalleries(this.$route.params.id, this.term, this.page )
       .then( (res)  => {
         this.authorsGalleries = res.data
         this.lastPage = res.last_page
